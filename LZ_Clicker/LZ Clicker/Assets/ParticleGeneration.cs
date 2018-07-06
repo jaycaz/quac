@@ -13,7 +13,7 @@ public class ParticleGeneration : MonoBehaviour {
 	public GameObject particlePrefab;
 	
 	public float maxTime =5.0f; //Time for generating the next particle
-	private float timer; 
+	private float instantiationTimer; 
 
 	//Coordinates for the particle generation
 	private Vector3 spawnAreaCenter;
@@ -31,7 +31,7 @@ public class ParticleGeneration : MonoBehaviour {
 		spawnAreaCenter=transform.position;
 		spawnAreaRange=transform.localScale/2;
 
-		timer= maxTime;
+		instantiationTimer= maxTime;
 
 	}
 	
@@ -43,7 +43,8 @@ public class ParticleGeneration : MonoBehaviour {
 		}
 	}
 
-	public void createParticle(){
+	//Creates a single particle instance
+	public void CreateParticle(){
 		//select a random place in the quad for the particle generation and instantiate
 
 		Vector3 randomPosition = new Vector3(Random.Range(-spawnAreaRange.x,spawnAreaRange.x),Random.Range(-spawnAreaRange.y,spawnAreaRange.y),0);
@@ -57,4 +58,13 @@ public class ParticleGeneration : MonoBehaviour {
 			}
 		particleInstance.GetComponent<ParticleClicking>().SetVelocity(velocity.normalized);
 	}
+	//Creates
+	private void SpawnParticles(){
+		InstantiationTimer -= Time.deltaTime;
+		if (InstantiationTimer <= 0)
+		{
+			CreateParticle();
+			instantiationTimer = maxTime;
+			}
+		}
 }
