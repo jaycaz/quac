@@ -1,0 +1,17 @@
+﻿<Properties StartupConfiguration="{71D6EF70-8DC5-6898-84B8-93A87AC0EB8F}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../pvg/pvg-game/Assets/Scripts/Meteors/MeteorGeneration.cs">
+    <Files>
+      <File FileName="Assets/Scripts/ElectronBehavior.cs" Line="59" Column="36" />
+      <File FileName="../../UnityTutorial/New Unity Project/Assets/SpaceBounce.cs" Line="7" Column="35" />
+      <File FileName="Assets/Scripts/BunchManager.cs" Line="22" Column="42" />
+      <File FileName="../pvg/pvg-game/Assets/Scripts/Meteors/MeteorGeneration.cs" Line="7" Column="84" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
