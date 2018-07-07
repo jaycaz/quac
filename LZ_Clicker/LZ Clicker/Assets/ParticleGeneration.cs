@@ -12,7 +12,7 @@ public class ParticleGeneration : MonoBehaviour {
 
 	public GameObject particlePrefab;
 	
-	public float maxTime =5.0f; //Time for generating the next particle
+	public float maxTime =0.1f; //Time for generating the next particle
 	private float instantiationTimer; 
 
 	//Coordinates for the particle generation
@@ -22,6 +22,10 @@ public class ParticleGeneration : MonoBehaviour {
 
 	//Coordinates for radial movement of particles
 	public GameObject innerDetector; // For 'radial' style radiation only
+	private Vector3 innerDetectorCenter;
+	private Vector3 innerDetectorAreaRange;
+	private Vector3 innerDetectorTarget;
+
 	public Vector3 velocity; // For 'shower' style radiation only
 
 	// Use this for initialization
@@ -31,16 +35,16 @@ public class ParticleGeneration : MonoBehaviour {
 		spawnAreaCenter=transform.position;
 		spawnAreaRange=transform.localScale/2;
 
+		innerDetectorCenter=innerDetector.transform.position;
+		innerDetectorAreaRange=innerDetector.transform.localScale/2;
+
 		instantiationTimer= maxTime;
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown("space")){
-
-			createParticle();
-		}
+		SpawnParticles();
 	}
 
 	//Creates a single particle instance
@@ -50,18 +54,20 @@ public class ParticleGeneration : MonoBehaviour {
 		Vector3 randomPosition = new Vector3(Random.Range(-spawnAreaRange.x,spawnAreaRange.x),Random.Range(-spawnAreaRange.y,spawnAreaRange.y),0);
 		particleInstance=Instantiate(particlePrefab,randomPosition+spawnAreaCenter, Quaternion.Euler(0,0,0));
 		switch(mode){
+			//Find a random point in the inner detector and aim at it
 			case RadiationDirection.Radial:
-				velocity=new Vector3(innerDetector.transform.position.x -particleInstance.transform.position.x,innerDetector.transform.position.y -particleInstance.transform.position.y,0);
+				innerDetectorTarget=new Vector3(Random.Range(-innerDetectorAreaRange.x,innerDetectorAreaRange.x),Random.Range(-innerDetectorAreaRange.y,innerDetectorAreaRange.y),0);
+				velocity=new Vector3(innerDetector.transform.position.x+innerDetectorTarget.x -particleInstance.transform.position.x,innerDetector.transform.position.y +innerDetectorTarget.y-particleInstance.transform.position.y,0);
 				break;
 			default:
 				break;
 			}
 		particleInstance.GetComponent<ParticleClicking>().SetVelocity(velocity.normalized);
 	}
-	//Creates
+	//Keeps track of time to spaw particles at a fixed rate, determined by maxTime
 	private void SpawnParticles(){
-		InstantiationTimer -= Time.deltaTime;
-		if (InstantiationTimer <= 0)
+		instantiationTimer -= Time.deltaTime;
+		if (instantiationTimer <= 0)
 		{
 			CreateParticle();
 			instantiationTimer = maxTime;

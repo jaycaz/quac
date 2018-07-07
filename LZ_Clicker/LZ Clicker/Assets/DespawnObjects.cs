@@ -14,7 +14,7 @@ public class DespawnObjects : MonoBehaviour {
 		
 	}
 
-	void OnTriggerExit2D(Collider2D other) {
+	void OnTriggerEnter2D(Collider2D other) {
 		Destroy(other.gameObject);
 	}
 }
