@@ -12,8 +12,16 @@ public class ParticleGeneration : MonoBehaviour {
 
 	public GameObject particlePrefab;
 	
-	public float maxTime =0.1f; //Time for generating the next particle
+	public DebugMenu debugMenu;
+
+	public float maxTime = 0.1f;
+
 	private float instantiationTimer; 
+
+	// Generation parameters
+	private float spawnRate = 1f; // Rate at which particles should be generated
+	private float spawnSpeed = 1f; // Initial velocity multiplier for particles
+	private float spawnSize = 1f; // Size at which to spawn particles
 
 	//Coordinates for the particle generation
 	private Vector3 spawnAreaCenter;
@@ -38,13 +46,41 @@ public class ParticleGeneration : MonoBehaviour {
 		innerDetectorCenter=innerDetector.transform.position;
 		innerDetectorAreaRange=innerDetector.transform.localScale/2;
 
-		instantiationTimer= maxTime;
+		instantiationTimer = 0f;
 
+		// var debugMenu = GameObject.FindObjectOfType<DebugMenu>();
+		if(debugMenu != null)
+		{
+			debugMenu.OnSpawnRateChange.AddListener(SetSpawnRate);
+			debugMenu.OnSpawnSpeedChange.AddListener(SetSpawnSpeed);
+			debugMenu.OnSpawnSizeChange.AddListener(SetSpawnSize);
+		}
+	}
+
+	void OnDestroy() {
+		if(debugMenu != null)
+		{
+			debugMenu.OnSpawnRateChange.RemoveListener(SetSpawnRate);
+			debugMenu.OnSpawnSpeedChange.RemoveListener(SetSpawnSpeed);
+			debugMenu.OnSpawnSizeChange.RemoveListener(SetSpawnSize);
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		SpawnParticles();
+	}
+
+	public void SetSpawnRate(float spawnRate) {
+		this.spawnRate = spawnRate;
+	}
+
+	public void SetSpawnSpeed(float spawnSpeed) {
+		this.spawnSpeed = spawnSpeed;
+	}
+
+	public void SetSpawnSize(float spawnSize) {
+		this.spawnSize = spawnSize;
 	}
 
 	//Creates a single particle instance
@@ -62,15 +98,17 @@ public class ParticleGeneration : MonoBehaviour {
 			default:
 				break;
 			}
-		particleInstance.GetComponent<ParticleClicking>().SetVelocity(velocity.normalized);
+		particleInstance.GetComponent<ParticleClicking>().SetVelocity(velocity.normalized * spawnSpeed);
+		particleInstance.transform.localScale *= spawnSize;
 	}
-	//Keeps track of time to spaw particles at a fixed rate, determined by maxTime
+	//Keeps track of time to spaw particles at a fixed rate, determined by spawnRate
 	private void SpawnParticles(){
-		instantiationTimer -= Time.deltaTime;
-		if (instantiationTimer <= 0)
+		instantiationTimer += Time.deltaTime;
+		float scaledMaxTime = maxTime / spawnRate;
+		if (instantiationTimer >= scaledMaxTime)
 		{
 			CreateParticle();
-			instantiationTimer = maxTime;
+			instantiationTimer = 0f;
 			}
 		}
 }

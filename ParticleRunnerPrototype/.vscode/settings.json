@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "obj": true,
+        "Library": true,
+        "Temp": true,
+        "Packages": true,
+        "ProjectSettings": true
+    }
+}
