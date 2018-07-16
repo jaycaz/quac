@@ -55,7 +55,7 @@ public class BunchManager : MonoBehaviour {
             float yi = tf.position.y;
             float ri = Mathf.Pow(xi * xi + yi * yi, 0.5f);
             float phii = 180f/Mathf.PI*Mathf.Atan2(yi, xi);
-            if (Mathf.Abs(phii - phi + 180) < 45f && ri > 2f)
+            if (Mathf.Abs(phii - phi + 180) < 22.5f && ri > 2f)
             {
                 Rigidbody rb = electrons[iE].gameObject.GetComponent<Rigidbody>();
                 rb.AddForce(new Vector3(x, y, 0f));
