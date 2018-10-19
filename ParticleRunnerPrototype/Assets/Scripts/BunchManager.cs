@@ -13,6 +13,7 @@ public class BunchManager : MonoBehaviour {
     public GameObject prefabElectron;
     private GameObject electron;
     private GameObject electronParent;
+    public float quadForceTuningParam = 1;
 
 
 
@@ -67,6 +68,7 @@ public class BunchManager : MonoBehaviour {
     {
         for(int i = 0; i < electrons.Count; i++)
         {
+            if (electrons[i] == null) continue;
             electrons[i].GetComponent<ElectronBehavior>().addedForce = force;
         }
     }
@@ -78,6 +80,56 @@ public class BunchManager : MonoBehaviour {
     public void SetNumParticles(float numParticles)
     {
         SetNumParticles((int) numParticles);
+    }
+
+    //This tunes the beam of particles by acting on it with a quadrupole force
+    public void tuneBeamQuadrupole(float phi)
+    {
+        //If you press the top or bottom buttons, focus in one direction
+        if (phi == 180 || phi == 0)
+        {
+            int numElectrons = electrons.Count;
+            for (int iE = 0; iE < numElectrons; ++iE)
+            {
+                //Loop over all electrons and identify their x and y positions
+                if (electrons[iE] == null) continue;
+                Transform tf = electrons[iE].gameObject.transform;
+                float xi = tf.position.x;
+                float yi = tf.position.y;
+
+                //Calculate the magnetic focusing force based on this position
+                float fx = 1 * quadForceTuningParam * xi;
+                float fy = -1 *quadForceTuningParam * yi;
+
+                Rigidbody rb = electrons[iE].gameObject.GetComponent<Rigidbody>();
+                rb.AddForce(new Vector3(fx, fy, 0f));
+
+            }   
+        }
+        else if (phi == 90 || phi == 270)
+        {
+            int numElectrons = electrons.Count;
+            for (int iE = 0; iE < numElectrons; ++iE)
+            {
+                //Loop over all electrons and identify their x and y positions
+                if (electrons[iE] == null) continue;
+                Transform tf = electrons[iE].gameObject.transform;
+                float xi = tf.position.x;
+                float yi = tf.position.y;
+
+                //Calculate the magnetic focusing force based on this position
+                float fx = -1* quadForceTuningParam * xi;
+                float fy = 1 * quadForceTuningParam * yi;
+
+                Rigidbody rb = electrons[iE].gameObject.GetComponent<Rigidbody>();
+                rb.AddForce(new Vector3(fx, fy, 0f));
+
+            }   
+        }
+        else{
+            Debug.Log("This button is currently inactive.");
+        }
+        
     }
 
     public void tuneBeamAll( float phi )
