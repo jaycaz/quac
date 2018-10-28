@@ -14,7 +14,13 @@ public class BunchManager : MonoBehaviour {
     private GameObject electron;
     private GameObject electronParent;
     public float quadForceTuningParam = 1;
-
+    public float probabilityOfTurn = 0.001f;
+    public float simulatedTurnForce = 1f;
+    private bool isInTurn = false;
+    private int counter = 0;
+    public int nUpdatesTurn = 100;
+    public float dipoleTuningForce = 1f;
+    
 
 
 	// Use this for initialization
@@ -39,7 +45,60 @@ public class BunchManager : MonoBehaviour {
 
         // Debug.Log("Fuck");
 
+        //Every once in a while, turn a uniform force on all of the particles,
+        //in either the left or right direction
+
+        //If isInTurn, then just keep simulating the turn and updating isInTurn
+        //with the turn simulation
+        if (isInTurn) isInTurn = SimulateTurn(counter);
+
+        //If not in turn, then test to see if we should start one
+        if( !isInTurn ){
+            if( Random.value < probabilityOfTurn ){
+                counter = 0;
+                isInTurn = SimulateTurn(counter);
+            }
+        }
+
+
+
+
+        Debug.LogFormat("Status of turn: {0}", isInTurn);
+
 	}
+
+
+    //This is the function called from one of the two dipole force buttons
+    public void tuneBeamDipole(int direction){
+        int numElectrons = electrons.Count;
+        for (int iE = 0; iE < numElectrons; ++iE)
+        {
+            if (electrons[iE] == null) continue;
+            float fx = dipoleTuningForce;
+            Rigidbody rb = electrons[iE].gameObject.GetComponent<Rigidbody>();
+            rb.AddForce(new Vector3(direction * fx, 0f, 0f));
+        }
+    }
+
+
+
+    //This simulates the turn of the particles
+    public bool SimulateTurn(int iUpdate)
+    {
+        counter++;
+        int numElectrons = electrons.Count;
+        for (int iE = 0; iE < numElectrons; ++iE)
+        {
+            if (electrons[iE] == null) continue;
+            float fx = simulatedTurnForce;
+            Rigidbody rb = electrons[iE].gameObject.GetComponent<Rigidbody>();
+            rb.AddForce(new Vector3(fx, 0f, 0f));
+        }
+        if (counter > nUpdatesTurn) return false;
+        else { return true; }
+    }
+
+
 
     public void Respawn()
     {
