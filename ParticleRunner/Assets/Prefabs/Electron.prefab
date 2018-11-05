@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quadForceTuningParam: 1
+  coulombForceTuningParam: 10
 --- !u!135 &135347809736380394
 SphereCollider:
   m_ObjectHideFlags: 1

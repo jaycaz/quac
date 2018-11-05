@@ -6,6 +6,7 @@ public class ElectronBehavior : MonoBehaviour {
 
     //Parameters for tuning beam
     public float quadForceTuningParam = 1;
+    public float coulombForceTuningParam = 1;
 
     private float electronWiggleParameter = 0;
     private float electronWiggleFrequency; //The frequency of sinusoidal oscillation is defined here.
@@ -27,6 +28,11 @@ public class ElectronBehavior : MonoBehaviour {
 	void Update () {
 
         WiggleElectronInZ();
+        DoSpaceChargeForces();
+
+
+
+
 
 
 	}
@@ -78,13 +84,44 @@ public class ElectronBehavior : MonoBehaviour {
         //Find all of the other electrons that have been created
         GameObject[] otherElectrons = GameObject.FindGameObjectsWithTag("Electron");
 
+        //Resultant force vector
+        Vector3 CoulombForceTotal = new Vector3(0,0,0);
+
+        //Find the transform of this electron
+        Vector3 thisElectronPosition = gameObject.transform.position;
+
         //Loop through all electrons
-        //foreach( GameObject e in otherElectrons )
+        foreach (GameObject e in otherElectrons)
+        {
+            if (e.gameObject == this.gameObject) continue;
+            else{
 
+                //Find the position of this electron
+                Vector3 otherElectronPosition = e.transform.position;
 
+                //Find the direction of the force, determine the distance, and then normalize the vector
+                Vector3 forceDirection = thisElectronPosition - otherElectronPosition;
+                float distance2 = forceDirection.sqrMagnitude;
+                forceDirection.Normalize();
+
+                //Now find the magnitude of the force between these two particles
+                float forceMag = coulombForceTuningParam / distance2;
+                Vector3 magVector = new Vector3(forceMag, forceMag, 0); //Don't want to push it in Z...
+                Vector3 forceTotal = Vector3.Scale(forceDirection, magVector);
+                CoulombForceTotal += forceTotal;
+            }
+        }
+
+        //Now add a force
+        gameObject.GetComponent<Rigidbody>().AddForce(CoulombForceTotal);
 
     }
 
 
+    //Check to see if this collision kills the electron.
+	private void OnCollisionEnter(Collision collision)
+	{
+		
+	}
 
 }
