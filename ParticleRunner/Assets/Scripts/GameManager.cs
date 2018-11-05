@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     public float bunchSpeed = 10.0f; //Speed of the pipe relative to the electron bunch
     private GameObject beamPipe;
     private float beamPipeInitialZ; //The initial Z location of the beamPipe.
+    private float beamPipeCurrentVel; //The current velocity of the beam pipe. This will be updated as we hit checkpoints. THIS IS NOT A PARAMETER. DO NOT TOUCH.
 
     //These are the game objects (electrons) created by this game manager
     //and the associated parameters.
@@ -21,6 +22,10 @@ public class GameManager : MonoBehaviour {
     public float initialBunchSize = 10;
     public float electronZPosition = -7f;
 
+    //Parameters associated with checkpoint mechanic
+    public float checkpointTime = 5f; //seconds
+    private int checkpointCounter = 0;
+    public float checkpointVelocityIncrement = 5f;
 
     // Use this for initialization
     void Start () {
@@ -37,7 +42,17 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+
+        //Rudimentary way to implement checkpoints: every fixed time, increase the speed
+        //of the beam pipe.
+        if (Time.realtimeSinceStartup > checkpointCounter*checkpointTime){
+            Debug.LogFormat("Current beam pipe vel: {0}", beamPipeCurrentVel);
+            beamPipeCurrentVel += checkpointVelocityIncrement;
+            checkpointCounter++;
+            SetBeamPipeVelocity(beamPipe, beamPipeCurrentVel);
+        }
+
+
 	}
 
     //This sets the speed at which the beampipe moves.
@@ -71,8 +86,16 @@ public class GameManager : MonoBehaviour {
         SetBeamPipeVelocity(beamPipe,0f);
         Vector3 pos = new Vector3(beamPipe.transform.position.x, beamPipe.transform.position.y, beamPipeInitialZ);
         beamPipe.transform.position = pos;
-        SetBeamPipeVelocity(beamPipe, bunchSpeed); 
+        SetBeamPipeVelocity(beamPipe, bunchSpeed);
+        beamPipeCurrentVel = bunchSpeed;
     }
+
+    //Getter function for the current beam pipe velocity
+    public float GetCurrentBeamPipeVel(){
+        return beamPipeCurrentVel;
+    }
+
+
 }
 
 
