@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour {
 
@@ -52,7 +53,15 @@ public class GameManager : MonoBehaviour {
             SetBeamPipeVelocity(beamPipe, beamPipeCurrentVel);
         }
 
+        if (Input.GetKeyDown ("x"))
+        {
+            EventManager.TriggerEvent ("Xfocus");
+        }
 
+        if (Input.GetKeyDown ("y"))
+        {
+            EventManager.TriggerEvent ("Yfocus");
+        }
 	}
 
     //This sets the speed at which the beampipe moves.
