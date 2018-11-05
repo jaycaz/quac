@@ -8,11 +8,18 @@ public class ElectronBehavior : MonoBehaviour {
     public float quadForceTuningParam = 1;
 
     private float electronWiggleParameter = 0;
+    private float electronWiggleFrequency; //The frequency of sinusoidal oscillation is defined here.
+    private float initialElectronPositionZ;
+
 
 	// Use this for initialization
 	void Start () {
-		
-       
+
+        //Define the frequency once here, with a random value
+        electronWiggleFrequency = Random.value;
+
+        //Identify initial parameters of the electron
+        initialElectronPositionZ = gameObject.transform.position.z;
 
 	}
 	
@@ -27,9 +34,8 @@ public class ElectronBehavior : MonoBehaviour {
     //Move the electrons somehow in z
     private void WiggleElectronInZ()
     {
-        float wigglefrequency = Random.value;
-        electronWiggleParameter += 0.1f*wigglefrequency;
-        float electronPositionZ = 1f*Mathf.Sin(electronWiggleParameter);
+        electronWiggleParameter += 0.03f*electronWiggleFrequency;
+        float electronPositionZ = initialElectronPositionZ + 1f*Mathf.Sin(electronWiggleParameter);
         Vector3 pos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, electronPositionZ);
         gameObject.transform.position = pos;
     }
@@ -65,6 +71,19 @@ public class ElectronBehavior : MonoBehaviour {
         DoQuadrupoleFocusingGeneral(1);
     }
 
+
+    //Coulomb forces
+    private void DoSpaceChargeForces()
+    {
+        //Find all of the other electrons that have been created
+        GameObject[] otherElectrons = GameObject.FindGameObjectsWithTag("Electron");
+
+        //Loop through all electrons
+        //foreach( GameObject e in otherElectrons )
+
+
+
+    }
 
 
 
