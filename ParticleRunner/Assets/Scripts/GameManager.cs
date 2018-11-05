@@ -52,16 +52,6 @@ public class GameManager : MonoBehaviour {
             checkpointCounter++;
             SetBeamPipeVelocity(beamPipe, beamPipeCurrentVel);
         }
-
-        if (Input.GetKeyDown ("x"))
-        {
-            EventManager.TriggerEvent ("Xfocus");
-        }
-
-        if (Input.GetKeyDown ("y"))
-        {
-            EventManager.TriggerEvent ("Yfocus");
-        }
 	}
 
     //This sets the speed at which the beampipe moves.
