@@ -834,7 +834,7 @@ MonoBehaviour:
   prefabElectron: {fileID: 1445610904191606, guid: 1e4389374b8e54d9b86fe22fdb4c40b6,
     type: 2}
   quadForceTuningParam: 10
-  probabilityOfTurn: 0.002
+  probabilityOfTurn: 0
   simulatedTurnForce: 0.5
   nUpdatesTurn: 300
   dipoleTuningForce: 10
