@@ -2018,7 +2018,7 @@ Transform:
   m_GameObject: {fileID: 1107817330}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.501, y: -0.868, z: -0}
-  m_LocalScale: {x: 1, y: 300, z: 1}
+  m_LocalScale: {x: 1, y: 180, z: 1}
   m_Children:
   - {fileID: 1362751004}
   - {fileID: 144798399}
@@ -2114,7 +2114,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-14624
+  m_Name: pb_Mesh12258
   serializedVersion: 9
   m_SubMeshes:
   - serializedVersion: 2
@@ -2303,7 +2303,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 10
   m_Range: 100
   m_SpotAngle: 6
   m_CookieSize: 10
@@ -2357,7 +2357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a7daf604a95d438abd78ae74c4ce6a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bunchSpeed: 10
+  bunchSpeed: 2
   prefabElectron: {fileID: 1575049538945958, guid: 47638e655de914c12b3a48861ee8905c,
     type: 2}
   initialBunchSize: 10
