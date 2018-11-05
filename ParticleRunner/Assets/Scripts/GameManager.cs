@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
     public GameObject prefabElectron;
     public float initialBunchSize = 10;
     public float electronZPosition = -7f;
+    public float startingBunchSpanTuningParam = 0.1f;
 
     //Parameters associated with checkpoint mechanic
     public float checkpointTime = 5f; //seconds
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour {
         //Create a bunch of electrons with a random distribution in X, Y
         for (int iEl = 0; iEl < initialBunchSize; ++iEl)
         {
-            electron = Instantiate(prefabElectron, new Vector3((Random.value-0.5f), (Random.value-0.5f), electronZPosition), Quaternion.identity);
+            electron = Instantiate(prefabElectron, new Vector3(startingBunchSpanTuningParam*(Random.value-0.5f), startingBunchSpanTuningParam*(Random.value-0.5f), electronZPosition), Quaternion.identity);
             electronsInBunch.Add(electron);
         }
 

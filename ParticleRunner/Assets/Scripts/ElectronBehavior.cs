@@ -132,11 +132,28 @@ public class ElectronBehavior : MonoBehaviour {
 
     }
 
-
-    //Check to see if this collision kills the electron.
-	private void OnCollisionEnter(Collision collision)
+	/*
+	private void OnTriggerEnter(Collider other)
 	{
-		
+        Debug.Log("Uhhh1.");
+        EventManager.StopListening("Xfocus", DoQuadrupoleFocusingX);
+        EventManager.StopListening("Yfocus", DoQuadrupoleFocusingY);
+        if (other.gameObject.name == "BeamPipe")
+        {
+            Debug.Log("KABOOM1");
+            //Destroy(gameObject);   
+        }
+	}
+*/
+    //Check to see if the electrons die
+	private void OnTriggerExit(Collider other)
+	{
+        if (other.gameObject.name == "BeamPipe")
+        {
+            EventManager.StopListening("Xfocus", DoQuadrupoleFocusingX);
+            EventManager.StopListening("Yfocus", DoQuadrupoleFocusingY);
+            Destroy(gameObject); 
+        }
 	}
 
 }
