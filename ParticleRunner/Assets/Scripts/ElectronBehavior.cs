@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events; // Just in case
 
 public class ElectronBehavior : MonoBehaviour {
 
@@ -13,6 +14,18 @@ public class ElectronBehavior : MonoBehaviour {
     private float initialElectronPositionZ;
 
 
+    // Listen to events
+    void OnEnable () {
+        EventManager.StartListening("Xfocus",DoQuadrupoleFocusingX);
+        EventManager.StartListening("Yfocus",DoQuadrupoleFocusingY);
+        
+    }
+
+    void OnDisable () {
+        EventManager.StopListening("Xfocus",DoQuadrupoleFocusingX);
+        EventManager.StopListening("Yfocus",DoQuadrupoleFocusingY);
+    }
+    
 	// Use this for initialization
 	void Start () {
 
@@ -67,13 +80,15 @@ public class ElectronBehavior : MonoBehaviour {
         
     //Specific Focusing in X
     public void DoQuadrupoleFocusingX()
-    {
+    {   
+        Debug.Log("XForce!");
         DoQuadrupoleFocusingGeneral(-1);
     }
 
     //Specific focusing in Y
     public void DoQuadrupoleFocusingY()
-    {
+    {   
+        Debug.Log("YForce!");
         DoQuadrupoleFocusingGeneral(1);
     }
 

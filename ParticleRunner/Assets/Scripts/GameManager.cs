@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour {
 
@@ -51,8 +52,6 @@ public class GameManager : MonoBehaviour {
             checkpointCounter++;
             SetBeamPipeVelocity(beamPipe, beamPipeCurrentVel);
         }
-
-
 	}
 
     //This sets the speed at which the beampipe moves.
