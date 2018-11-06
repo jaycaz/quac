@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
 
 
 
-    public float bunchSpeed = 10.0f; //Speed of the pipe relative to the electron bunch
+    public float bunchSpeed =30.0f; //Speed of the pipe relative to the electron bunch
     private GameObject beamPipe;
     private float beamPipeInitialZ; //The initial Z location of the beamPipe.
     private float beamPipeCurrentVel; //The current velocity of the beam pipe. This will be updated as we hit checkpoints. THIS IS NOT A PARAMETER. DO NOT TOUCH.
@@ -29,6 +29,16 @@ public class GameManager : MonoBehaviour {
     private int checkpointCounter = 0;
     public float checkpointVelocityIncrement = 5f;
 
+    // Subscribe to events as soon as this object is enabled
+        void OnEnable () {
+        EventManager.StartListening("SpeedBoost",IncrementPipeVelocity);
+    }
+
+    void OnDisable () {
+        EventManager.StopListening("SpeedBoost",IncrementPipeVelocity);
+    }
+    
+
     // Use this for initialization
     void Start () {
 
@@ -46,13 +56,14 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 
         //Rudimentary way to implement checkpoints: every fixed time, increase the speed
-        //of the beam pipe.
+        //of the beam pipe. (DEPRECATED)
+        /*
         if (Time.realtimeSinceStartup > checkpointCounter*checkpointTime){
             Debug.LogFormat("Current beam pipe vel: {0}", beamPipeCurrentVel);
             beamPipeCurrentVel += checkpointVelocityIncrement;
             checkpointCounter++;
             SetBeamPipeVelocity(beamPipe, beamPipeCurrentVel);
-        }
+        }*/
 	}
 
     //This sets the speed at which the beampipe moves.
@@ -61,7 +72,15 @@ public class GameManager : MonoBehaviour {
         beamPipe.GetComponent<Rigidbody>().velocity = bunchVel;  
     }
   
-
+    //This adds velocity to the pipe upon triggered checkpoints it does so in fixed amounts for now, we can change it later
+    
+    void IncrementPipeVelocity(){
+        Debug.LogFormat("Current beam pipe vel: {0}", beamPipeCurrentVel);
+        beamPipeCurrentVel += checkpointVelocityIncrement;
+        checkpointCounter++;
+        SetBeamPipeVelocity(beamPipe, beamPipeCurrentVel);
+    
+    }
 
     //This kills all electrons if there are any, and re-spawns them. It also sets the beam pipe position back to
     //its original position
