@@ -5,26 +5,12 @@ using UnityEngine;
 public class PipeSpawner : MonoBehaviour {
 
 	public GameObject m_pipePrefab;
-
 	public GameObject m_pipesRoot;
-	public List<Pipe> m_pipes;
 
 	// Use this for initialization
 	void Start () {
 		Debug.Assert(m_pipePrefab != null, 
 			"PipeSpawner: Missing a pipe prefab to spawn");
-
-		m_pipes = new List<Pipe>();
-		for(int i = 0; i < m_pipesRoot.transform.childCount; i++)
-		{
-			Pipe pipe = m_pipesRoot.transform.GetChild(i).gameObject.GetComponent<Pipe>();
-			if(pipe != null)
-			{
-				Debug.Log(pipe);
-				m_pipes.Add(pipe);
-			}
-		}
-		Debug.LogFormat("Starting with {0} pipes", m_pipes.Count);
 	}
 	
 	// Update is called once per frame
@@ -43,18 +29,18 @@ public class PipeSpawner : MonoBehaviour {
 			// Debug.Log("Pipe exit");
 
 			// Find last pipe in chain
-			Pipe lastPipe = m_pipes[m_pipes.Count - 1];
+			Transform t = m_pipesRoot.transform.GetChild(m_pipesRoot.transform.childCount - 1);
+			Pipe lastPipe = t.GetComponent<Pipe>();
 
 			// Instantiate new pipe
 			GameObject newPipeObj = GameObject.Instantiate(m_pipePrefab);
 			Pipe newPipe = newPipeObj.GetComponent<Pipe>();
 
+			newPipeObj.transform.SetParent(m_pipesRoot.transform);
+
 			// Move new pipe so it's lined up with last pipe
 			newPipe.transform.position = 
 				lastPipe.transform.position + lastPipe.EndTransform.localPosition - newPipe.StartTransform.localPosition;
-			m_pipes.Add(newPipe);
 		}
-
-
 	}
 }

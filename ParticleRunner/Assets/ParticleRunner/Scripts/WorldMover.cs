@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WorldMover : MonoBehaviour {
 
+	[Range(0f, 25f)]
 	public float m_moveSpeed = 1.0f;
 	public Vector3 m_moveAxis = -Vector3.forward;
 

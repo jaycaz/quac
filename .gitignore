@@ -42,7 +42,7 @@ sysinfo.txt
 *.unitypackage
 
 ### VisualStudioCode ###
-.vscode/*
+*/.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -375,3 +375,6 @@ ASALocalRun/
 .localhistory/
 
 # End of https://www.gitignore.io/api/unity,visualstudio,visualstudiocode
+
+# User-created ignores
+LOCAL/
