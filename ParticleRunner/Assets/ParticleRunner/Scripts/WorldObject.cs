@@ -14,7 +14,10 @@ public class WorldObject : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position += 
-			Time.deltaTime * m_worldMover.m_moveSpeed * m_worldMover.m_moveAxis;
+		if(m_worldMover != null && m_worldMover.gameObject.activeSelf)
+		{
+			transform.position += 
+				Time.deltaTime * m_worldMover.m_moveSpeed * m_worldMover.m_moveAxis;
+		}
 	}
 }
