@@ -73,20 +73,39 @@ public class PipeSwitcher : MonoBehaviour {
 
 	public void SwitchAllPipes(GameObject newPipePrefab)
 	{
-		// Find all Pipe objects
+		// Find all Pipe objects and replace them
 		var scenePipes = GameObject.FindObjectsOfType<Pipe>();
 
+		int numPipes = scenePipes.Length;
+
+		if(numPipes > 0)
+		{
+			GameObject firstPipe = GameObject.Instantiate(newPipePrefab);
+			firstPipe.transform.position = scenePipes[numPipes-1].transform.position;
+			firstPipe.transform.rotation = scenePipes[numPipes-1].transform.rotation;
+			firstPipe.transform.localScale = scenePipes[numPipes-1].transform.localScale;
+
+			firstPipe.transform.SetParent(m_pipeSpawner.m_pipesRoot.transform);
+
+			Pipe prevPipe = firstPipe.GetComponent<Pipe>();
+			Debug.Assert(prevPipe != null, "PipeSwitcher: cannot switch to object without Pipe component");
+			for(int i = 1; i < numPipes; i++)
+			{
+				// Place each new pipe at the end of the previous pipe
+				GameObject newPipe = GameObject.Instantiate(newPipePrefab);
+				newPipe.transform.position = prevPipe.transform.position + 
+					(prevPipe.EndTransform.position - prevPipe.StartTransform.position);
+				newPipe.transform.rotation = prevPipe.transform.rotation;
+				newPipe.transform.localScale = prevPipe.transform.localScale;
+				newPipe.transform.SetParent(m_pipeSpawner.m_pipesRoot.transform);
+				prevPipe = newPipe.GetComponent<Pipe>();
+			}
+		}
+
+		// Destroy original pipes
 		for(int i = scenePipes.Length - 1; i >= 0; i--)
 		{
-			Pipe pipe = scenePipes[i];
-			GameObject newPipe = GameObject.Instantiate(newPipePrefab);
-			newPipe.transform.position = pipe.transform.position;
-			newPipe.transform.rotation = pipe.transform.rotation;
-			newPipe.transform.localScale = pipe.transform.localScale;
-
-			newPipe.transform.SetParent(pipe.transform.parent);
-
-			GameObject.Destroy(pipe.gameObject);
+			GameObject.Destroy(scenePipes[i].gameObject);
 		}
 
 		if(m_pipeSpawner != null)

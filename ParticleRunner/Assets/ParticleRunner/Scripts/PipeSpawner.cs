@@ -40,7 +40,7 @@ public class PipeSpawner : MonoBehaviour {
 
 			// Move new pipe so it's lined up with last pipe
 			newPipe.transform.position = 
-				lastPipe.transform.position + lastPipe.EndTransform.localPosition - newPipe.StartTransform.localPosition;
+				lastPipe.transform.position + (lastPipe.EndTransform.localPosition - newPipe.StartTransform.localPosition);
 		}
 	}
 }

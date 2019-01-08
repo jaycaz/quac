@@ -1,0 +1,8 @@
+newmtl PipeDark
+Kd 0.4622641 0.3903079 0.3903079
+d 1
+
+newmtl PipeDefault
+Kd 1 1 1
+d 1
+
