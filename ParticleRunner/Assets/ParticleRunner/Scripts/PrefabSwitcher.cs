@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PipeSwitcher : MonoBehaviour {
+public class PrefabSwitcher : MonoBehaviour {
 
 	public List<GameObject> m_pipePrefabList;
 	public List<string> m_names;
