@@ -74,38 +74,42 @@ public class PipeSwitcher : MonoBehaviour {
 	public void SwitchAllPipes(GameObject newPipePrefab)
 	{
 		// Find all Pipe objects and replace them
-		var scenePipes = GameObject.FindObjectsOfType<Pipe>();
-
-		int numPipes = scenePipes.Length;
+		Transform pipeRoot = m_pipeSpawner.m_pipesRoot.transform;
+		int numPipes = pipeRoot.childCount;
+		Pipe[] originalPipes = pipeRoot.GetComponentsInChildren<Pipe>();
 
 		if(numPipes > 0)
 		{
-			GameObject firstPipe = GameObject.Instantiate(newPipePrefab);
-			firstPipe.transform.position = scenePipes[numPipes-1].transform.position;
-			firstPipe.transform.rotation = scenePipes[numPipes-1].transform.rotation;
-			firstPipe.transform.localScale = scenePipes[numPipes-1].transform.localScale;
+			// Instantiate first new pipe
+			Transform firstPipeTransform = pipeRoot.GetChild(0);
+			GameObject firstNewPipe = GameObject.Instantiate(newPipePrefab);
+			firstNewPipe.transform.position = firstPipeTransform.position;
+			firstNewPipe.transform.rotation = firstPipeTransform.rotation;
+			firstNewPipe.transform.localScale = firstPipeTransform.localScale;
 
-			firstPipe.transform.SetParent(m_pipeSpawner.m_pipesRoot.transform);
+			// Destroy original pipes
+			for(int i = originalPipes.Length - 1; i >= 0; i--)
+			{
+				GameObject.Destroy(originalPipes[i].gameObject);
+			}
 
-			Pipe prevPipe = firstPipe.GetComponent<Pipe>();
+			// Add first pipe
+			firstNewPipe.transform.SetParent(pipeRoot);
+
+			// Instantiate the rest of the f***ing owl
+			Pipe prevPipe = firstNewPipe.GetComponent<Pipe>();
 			Debug.Assert(prevPipe != null, "PipeSwitcher: cannot switch to object without Pipe component");
 			for(int i = 1; i < numPipes; i++)
 			{
 				// Place each new pipe at the end of the previous pipe
 				GameObject newPipe = GameObject.Instantiate(newPipePrefab);
 				newPipe.transform.position = prevPipe.transform.position + 
-					(prevPipe.EndTransform.position - prevPipe.StartTransform.position);
+					(prevPipe.EndTransform.localPosition - prevPipe.StartTransform.localPosition);
 				newPipe.transform.rotation = prevPipe.transform.rotation;
 				newPipe.transform.localScale = prevPipe.transform.localScale;
-				newPipe.transform.SetParent(m_pipeSpawner.m_pipesRoot.transform);
+				newPipe.transform.SetParent(pipeRoot);
 				prevPipe = newPipe.GetComponent<Pipe>();
 			}
-		}
-
-		// Destroy original pipes
-		for(int i = scenePipes.Length - 1; i >= 0; i--)
-		{
-			GameObject.Destroy(scenePipes[i].gameObject);
 		}
 
 		if(m_pipeSpawner != null)
