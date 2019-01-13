@@ -150,8 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 116bfdb561ca54ca3a272738301e7091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quadForceTuningParam: 50
-  coulombForceTuningParam: 0.0001
+  quadForceTuningParam: 10
+  coulombForceTuningParam: 0.0003
 --- !u!135 &135347809736380394
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -162,5 +162,5 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.01
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}

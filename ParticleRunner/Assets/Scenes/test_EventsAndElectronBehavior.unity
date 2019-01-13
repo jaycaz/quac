@@ -2884,7 +2884,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh12400
+  m_Name: pb_Mesh12410
   serializedVersion: 9
   m_SubMeshes:
   - serializedVersion: 2
@@ -3128,7 +3128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bunchSpeed: 2
-  prefabElectron: {fileID: 1575049538945958, guid: 47638e655de914c12b3a48861ee8905c,
+  prefabElectron: {fileID: 1637752885792466, guid: df6eb153c854f4fd5811738562184df5,
     type: 2}
   initialBunchSize: 30
   electronZPosition: -7
