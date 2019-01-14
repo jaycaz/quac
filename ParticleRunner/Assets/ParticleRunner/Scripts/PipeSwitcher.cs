@@ -84,25 +84,26 @@ public class SwitcherUtil
 	}
 }
 
-public class PipeSwitcher : MonoBehaviour {
+public abstract class Switcher<Type> : MonoBehaviour {
 
-	public List<GameObject> m_pipePrefabList;
+	public List<GameObject> m_switchObjectList;
 	public List<string> m_names;
-	public PipeSpawner m_pipeSpawner;
 	public SwitcherUtil.SwitcherType m_switcherDebugInputType;
 
-	private int m_currentIndex = 0;
+	protected int m_currentIndex;
+
+	private static string m_debugName;
 
 	void OnGUI()
 	{
 		GUILayout.BeginArea(new Rect(10 + 100 * (int) m_switcherDebugInputType, 10, 110, 500));
 		GUILayout.BeginVertical();
 
-		GUILayout.Label("Select Pipe");
-		for(int i = 0; i < m_pipePrefabList.Count; i++)
+		GUILayout.Label(string.Format("Select {0}", m_debugName));
+		for(int i = 0; i < m_switchObjectList.Count; i++)
 		{
 			bool current = m_currentIndex == i;
-			string entryName = (i < m_names.Count) ? m_names[i] : m_pipePrefabList[i].name;
+			string entryName = (i < m_names.Count) ? m_names[i] : m_switchObjectList[i].name;
 			GUILayout.Label(string.Format(
 				"{0}{1} - {2}{3}",
 				current ? "[" : "",
@@ -123,21 +124,27 @@ public class PipeSwitcher : MonoBehaviour {
 
 		if(input >= 0)
 		{
-			SwitchAllPipes(input);
+			SwitchAllObjects(input);
 		}
-
 	}
 
-	public void SwitchAllPipes(int index)
+	public void SwitchAllObjects(int index)
 	{
-		if(index < m_pipePrefabList.Count)
+		if(index < m_switchObjectList.Count)
 		{
 			m_currentIndex = index;
-			SwitchAllPipes(m_pipePrefabList[index]);
+			SwitchAllObjects(m_switchObjectList[index - 1]);
 		}
 	}
 
-	public void SwitchAllPipes(GameObject newPipePrefab)
+	protected abstract void SwitchAllObjects(GameObject newObjPrefab);
+}
+
+public class PipeSwitcher : Switcher<Pipe> {
+
+	public PipeSpawner m_pipeSpawner;
+
+	protected override void SwitchAllObjects(GameObject newPipePrefab)
 	{
 		// Find all Pipe objects and replace them
 		Transform pipeRoot = m_pipeSpawner.m_pipesRoot.transform;
