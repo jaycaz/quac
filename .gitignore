@@ -109,7 +109,7 @@ StyleCopReport.xml
 *_h.h
 *.ilk
 #*.meta
-*.obj
+#*.obj
 *.iobj
 *.pch
 *.ipdb
