@@ -1,0 +1,123 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class GameManager : MonoBehaviour {
+
+    
+
+
+
+
+    public float bunchSpeed =30.0f; //Speed of the pipe relative to the electron bunch
+    private GameObject beamPipe;
+    private float beamPipeInitialZ; //The initial Z location of the beamPipe.
+    private float beamPipeCurrentVel; //The current velocity of the beam pipe. This will be updated as we hit checkpoints. THIS IS NOT A PARAMETER. DO NOT TOUCH.
+
+    //These are the game objects (electrons) created by this game manager
+    //and the associated parameters.
+    private List<GameObject> electronsInBunch;
+    private GameObject electron;
+    public GameObject prefabElectron;
+    public float initialBunchSize = 10;
+    public float electronZPosition = -7f;
+    public float startingBunchSpanTuningParam = 0.1f;
+
+    //Parameters associated with checkpoint mechanic
+    public float checkpointTime = 5f; //seconds
+    private int checkpointCounter = 0;
+    public float checkpointVelocityIncrement = 5f;
+
+    // Subscribe to events as soon as this object is enabled
+        void OnEnable () {
+        EventManager.StartListening("SpeedBoost",IncrementPipeVelocity);
+    }
+
+    void OnDisable () {
+        EventManager.StopListening("SpeedBoost",IncrementPipeVelocity);
+    }
+    
+
+    // Use this for initialization
+    void Start () {
+
+        //Get the beam pipe and find its position in z
+        beamPipe = GameObject.Find("BeamPipe");
+        beamPipeInitialZ = beamPipe.transform.position.z;
+
+        //Create a bunch of electrons and start the beam pipe motion.
+        electronsInBunch = new List<GameObject>();
+        Respawn();
+
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+        //Rudimentary way to implement checkpoints: every fixed time, increase the speed
+        //of the beam pipe. (DEPRECATED)
+        /*
+        if (Time.realtimeSinceStartup > checkpointCounter*checkpointTime){
+            Debug.LogFormat("Current beam pipe vel: {0}", beamPipeCurrentVel);
+            beamPipeCurrentVel += checkpointVelocityIncrement;
+            checkpointCounter++;
+            SetBeamPipeVelocity(beamPipe, beamPipeCurrentVel);
+        }*/
+	}
+
+    //This sets the speed at which the beampipe moves.
+    void SetBeamPipeVelocity(GameObject beamPipe, float velocity){
+        Vector3 bunchVel = new Vector3(0f, 0f, -1 * velocity);
+        beamPipe.GetComponent<Rigidbody>().velocity = bunchVel;  
+    }
+  
+    //This adds velocity to the pipe upon triggered checkpoints it does so in fixed amounts for now, we can change it later
+    
+    void IncrementPipeVelocity(){
+        Debug.LogFormat("Current beam pipe vel: {0}", beamPipeCurrentVel);
+        beamPipeCurrentVel += checkpointVelocityIncrement;
+        checkpointCounter++;
+        SetBeamPipeVelocity(beamPipe, beamPipeCurrentVel);
+    
+    }
+
+    //This kills all electrons if there are any, and re-spawns them. It also sets the beam pipe position back to
+    //its original position
+    public void Respawn()
+    {
+        
+        foreach (GameObject e in electronsInBunch){
+            if (e != null){
+                Destroy(e.gameObject);
+            }
+        }
+
+
+        //Create a bunch of electrons with a random distribution in X, Y
+        for (int iEl = 0; iEl < initialBunchSize; ++iEl)
+        {
+            electron = Instantiate(prefabElectron, new Vector3(startingBunchSpanTuningParam*(Random.value-0.5f), startingBunchSpanTuningParam*(Random.value-0.5f), electronZPosition), Quaternion.identity);
+            electronsInBunch.Add(electron);
+        }
+
+        //Move the beamPipe back to the start and start it moving again
+        SetBeamPipeVelocity(beamPipe,0f);
+        Vector3 pos = new Vector3(beamPipe.transform.position.x, beamPipe.transform.position.y, beamPipeInitialZ);
+        beamPipe.transform.position = pos;
+        SetBeamPipeVelocity(beamPipe, bunchSpeed);
+        beamPipeCurrentVel = bunchSpeed;
+    }
+
+    //Getter function for the current beam pipe velocity
+    public float GetCurrentBeamPipeVel(){
+        return beamPipeCurrentVel;
+    }
+
+
+}
+
+
+
+
+
