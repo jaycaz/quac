@@ -2,78 +2,149 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PipeSwitcher : MonoBehaviour {
+public class SwitcherUtil
+{
+	public enum SwitcherType
+	{
+		Numbers,
+		QWERTY,
+		ASDFGH,
+		ZXCVBN
+	}
 
-	public List<GameObject> m_pipePrefabList;
+	private static string NUMBER_STR = "1234567890";
+	private static string QWERTY_STR = "QWERTYUIOP";
+	private static string ASDFGH_STR = "ASDFGHJKL;";
+	private static string ZXCVBN_STR = "ZXCVBNM,./";
+
+	private static KeyCode[] NUMBER_KEYS = new KeyCode[10]
+	{
+		KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6, KeyCode.Alpha7, KeyCode.Alpha8, KeyCode.Alpha9, KeyCode.Alpha0
+	};
+	private static KeyCode[] QWERTY_KEYS = new KeyCode[10]
+	{
+		KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.T, KeyCode.Y, KeyCode.U, KeyCode.I, KeyCode.O, KeyCode.P
+	};
+	private static KeyCode[] ASDFGH_KEYS = new KeyCode[10]
+	{
+		KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F, KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.K, KeyCode.L, KeyCode.Semicolon
+	};
+	private static KeyCode[] ZXCVBN_KEYS = new KeyCode[10]
+	{
+		KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V, KeyCode.B, KeyCode.N, KeyCode.M, KeyCode.Comma, KeyCode.Period, KeyCode.Slash
+	};
+
+	public static char GetKeyStr(SwitcherType switcherType, int index)
+	{
+		if(index < 0 || index > 9) return '\0';
+
+		switch(switcherType)
+		{
+			case SwitcherType.Numbers:
+				return NUMBER_STR[index];
+			case SwitcherType.QWERTY:
+				return QWERTY_STR[index];
+			case SwitcherType.ASDFGH:
+				return ASDFGH_STR[index];
+			case SwitcherType.ZXCVBN:
+				return ZXCVBN_STR[index];
+			default:
+				return '\0';
+		}
+	}
+
+	public static int GetInput(SwitcherType switcherType)
+	{
+		KeyCode[] keys;
+		switch(switcherType)
+		{
+			case SwitcherType.Numbers:
+				keys = NUMBER_KEYS;
+				break;
+			case SwitcherType.QWERTY:
+				keys = QWERTY_KEYS;
+				break;
+			case SwitcherType.ASDFGH:
+				keys = ASDFGH_KEYS;
+				break;
+			case SwitcherType.ZXCVBN:
+				keys = ZXCVBN_KEYS;
+				break;
+			default:
+				return -1;
+		}
+
+		for(int i = 0; i <= 9; i++)
+		{
+			if(Input.GetKeyDown(keys[i]))
+				return i;
+		}
+
+		return -1;
+	}
+}
+
+public abstract class Switcher<Type> : MonoBehaviour {
+
+	public List<GameObject> m_switchObjectList;
 	public List<string> m_names;
-	public PipeSpawner m_pipeSpawner;
+	public SwitcherUtil.SwitcherType m_switcherDebugInputType;
 
-	private int m_currentIndex = 0;
+	protected int m_currentIndex;
+
+	private static string m_debugName;
 
 	void OnGUI()
 	{
-		// GUILayout.Label(
-		// "Enter - Next Pipe,\n" + 
-		// "Backspace - Prev Pipe\n" + 
-		// "Number Key - Select Pipe (1-9)\n");
+		GUILayout.BeginArea(new Rect(10 + 100 * (int) m_switcherDebugInputType, 10, 110, 500));
+		GUILayout.BeginVertical();
 
-		GUILayout.Label("Number Key - Select Pipe (1-9)\n");
-
-		for(int i = 0; i < m_pipePrefabList.Count; i++)
+		GUILayout.Label(string.Format("Select {0}", m_debugName));
+		for(int i = 0; i < m_switchObjectList.Count; i++)
 		{
-			string entryName = (i < m_names.Count) ? m_names[i] : m_pipePrefabList[i].name;
+			bool current = m_currentIndex == i;
+			string entryName = (i < m_names.Count) ? m_names[i] : m_switchObjectList[i].name;
 			GUILayout.Label(string.Format(
-				"{0} - {1}",
+				"{0}{1} - {2}{3}",
+				current ? "[" : "",
 				i+1,
-				entryName
+				entryName,
+				current ? "]" : ""
 			));
 		}
+
+		GUILayout.EndVertical();
+		GUILayout.EndArea();
 	}
 
 	// Update is called once per frame
 	void Update () {
 
-		// if(Input.GetKeyDown(KeyCode.Return))
-		// {
-		// 	m_currentIndex = (m_currentIndex + 1) % m_pipePrefabList.Count;
-		// 	SwitchAllPipes(m_currentIndex);
-		// }
-		// if(Input.GetKeyDown(KeyCode.Backspace))
-		// {
-		// 	m_currentIndex = (m_currentIndex - 1 + m_pipePrefabList.Count) % m_pipePrefabList.Count;
-		// 	SwitchAllPipes(m_currentIndex);
-		// }
-		if(Input.GetKeyDown(KeyCode.Alpha1))
-			SwitchAllPipes(0);
-		if(Input.GetKeyDown(KeyCode.Alpha2))
-			SwitchAllPipes(1);
-		if(Input.GetKeyDown(KeyCode.Alpha3))
-			SwitchAllPipes(2);
-		if(Input.GetKeyDown(KeyCode.Alpha4))
-			SwitchAllPipes(3);
-		if(Input.GetKeyDown(KeyCode.Alpha5))
-			SwitchAllPipes(4);
-		if(Input.GetKeyDown(KeyCode.Alpha6))
-			SwitchAllPipes(5);
-		if(Input.GetKeyDown(KeyCode.Alpha7))
-			SwitchAllPipes(6);
-		if(Input.GetKeyDown(KeyCode.Alpha8))
-			SwitchAllPipes(7);
-		if(Input.GetKeyDown(KeyCode.Alpha9))
-			SwitchAllPipes(8);
+		int input = SwitcherUtil.GetInput(m_switcherDebugInputType);
 
-	}
-
-	public void SwitchAllPipes(int index)
-	{
-		if(index < m_pipePrefabList.Count)
+		if(input >= 0)
 		{
-			m_currentIndex = index;
-			SwitchAllPipes(m_pipePrefabList[index]);
+			SwitchAllObjects(input);
 		}
 	}
 
-	public void SwitchAllPipes(GameObject newPipePrefab)
+	public void SwitchAllObjects(int index)
+	{
+		if(index < m_switchObjectList.Count)
+		{
+			m_currentIndex = index;
+			SwitchAllObjects(m_switchObjectList[index - 1]);
+		}
+	}
+
+	protected abstract void SwitchAllObjects(GameObject newObjPrefab);
+}
+
+public class PipeSwitcher : Switcher<Pipe> {
+
+	public PipeSpawner m_pipeSpawner;
+
+	protected override void SwitchAllObjects(GameObject newPipePrefab)
 	{
 		// Find all Pipe objects and replace them
 		Transform pipeRoot = m_pipeSpawner.m_pipesRoot.transform;
