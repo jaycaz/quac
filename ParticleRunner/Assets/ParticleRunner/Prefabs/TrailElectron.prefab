@@ -183,6 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   quadForceTuningParam: 10
   coulombForceTuningParam: 0.0002
+  prefabCollisionParticles: {fileID: 0}
 --- !u!135 &135581638039297562
 SphereCollider:
   m_ObjectHideFlags: 1

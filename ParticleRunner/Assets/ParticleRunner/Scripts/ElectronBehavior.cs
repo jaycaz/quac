@@ -8,10 +8,13 @@ public class ElectronBehavior : MonoBehaviour {
     //Parameters for tuning beam
     public float quadForceTuningParam = 1;
     public float coulombForceTuningParam = 1;
+    public GameObject prefabCollisionParticles;
 
     private float electronWiggleParameter = 0;
     private float electronWiggleFrequency; //The frequency of sinusoidal oscillation is defined here.
     private float initialElectronPositionZ;
+    private GameObject collisionParticles;
+    private AudioSource electronDeath;
 
 
     // Listen to events
@@ -34,6 +37,9 @@ public class ElectronBehavior : MonoBehaviour {
 
         //Identify initial parameters of the electron
         initialElectronPositionZ = gameObject.transform.position.z;
+
+        //Set the electron death sound
+        electronDeath = gameObject.GetComponent<AudioSource>();
 
 	}
 	
@@ -132,19 +138,27 @@ public class ElectronBehavior : MonoBehaviour {
 
     }
 
-	/*
+	
 	private void OnTriggerEnter(Collider other)
 	{
-        Debug.Log("Uhhh1.");
-        EventManager.StopListening("Xfocus", DoQuadrupoleFocusingX);
-        EventManager.StopListening("Yfocus", DoQuadrupoleFocusingY);
-        if (other.gameObject.name == "BeamPipe")
+        Debug.LogFormat("OnTriggerEnter fired, {0}.",other.name);
+        if (other.gameObject.name != "Electron(Clone)" &&
+            other.gameObject.name != "Dark5(0)" &&
+            other.gameObject.name != "Dark5(1)" &&
+            other.gameObject.name != "Dark5(2)" &&
+            other.gameObject.name != "Dark5(3)" &&
+            other.gameObject.name != "Dark5(Clone)" )
         {
             Debug.Log("KABOOM1");
-            //Destroy(gameObject);   
+            EventManager.StopListening("Xfocus", DoQuadrupoleFocusingX);
+            EventManager.StopListening("Yfocus", DoQuadrupoleFocusingY);
+
+          //  Destroy(gameObject);
+            StartCoroutine("KillElectron");
+
         }
 	}
-*/
+
     //Check to see if the electrons die
 	private void OnTriggerExit(Collider other)
 	{
@@ -155,5 +169,30 @@ public class ElectronBehavior : MonoBehaviour {
             Destroy(gameObject); 
         }
 	}
+
+    //Coroutine for playing the death sound before killing the gameobject.
+    IEnumerator KillElectron()
+    {
+        //Create a death sound
+        electronDeath.Play();
+
+        //Create a little poof of particles at this point
+        Vector3 pos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+        collisionParticles = Instantiate(prefabCollisionParticles, pos, Quaternion.identity);
+
+        //Turn the collider off so that it doesn't want to collide again. Once is enough.
+        gameObject.GetComponent<SphereCollider>().enabled = false;
+
+        //Turn the mesh renderer off so that the electron disappears
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+        //Return here after execution to see if the sound is done. I think this is the right way
+        //to do things with coroutines?
+        yield return new WaitForSeconds(0.5f);
+
+        //Kill once the sound has been played
+        Destroy(gameObject);
+                     
+    }
 
 }
