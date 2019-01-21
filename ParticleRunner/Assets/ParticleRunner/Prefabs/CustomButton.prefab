@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114322957587997278}
   - component: {fileID: 82088206637808858}
   m_Layer: 0
-  m_Name: QuadTuneButton
+  m_Name: CustomButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

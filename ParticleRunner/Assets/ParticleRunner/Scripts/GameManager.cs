@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
 
     //Parameters associated with speeding up the tunnel
-    public float dTPerSpeedup = 1f; //in s
+    public float dTPerSpeedup = 5f; //in s
     public float currentTime = 0;
     private float currentGamma = 1f;
     private WorldMover worldmover;
@@ -54,13 +54,18 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        //Update the length contraction factor only when the klystrons are fired.
+
+
+        /*
         //update length contraction factor continuously
         if( currentGamma < 5f ){
             if( Time.time - currentTime > dTPerSpeedup ){
                 currentTime = Time.time;
-                currentGamma += 0.03f;
+                currentGamma += 0.5f;
             }
         }
+        */
 	}
 
    
@@ -88,6 +93,12 @@ public class GameManager : MonoBehaviour {
     public float GetCurrentGamma()
     {
         return currentGamma;
+    }
+
+    //Sets gamma
+    public void SetGamma(float value)
+    {
+        currentGamma = value;
     }
 
 }
