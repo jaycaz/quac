@@ -41,20 +41,18 @@ public class PipeSpawner : MonoBehaviour {
 			newPipeObj.transform.SetParent(m_pipesRoot.transform);
 
             //Modify the length of the pipe so that it length contracts as we get faster.
-            Vector3 scaleVect = new Vector3(newPipe.transform.localScale.x, newPipe.transform.localScale.y, newPipe.transform.localScale.z / m_gameManager.GetCurrentGamma());
-            newPipe.transform.localScale = scaleVect;
-
-            //Also have to modify the start and end transform positions so that they line up with the ends of the pipe
-            newPipe.StartTransform.localPosition = new Vector3(newPipe.StartTransform.localPosition.x, newPipe.StartTransform.localPosition.y, newPipe.StartTransform.localPosition.z / m_gameManager.GetCurrentGamma());
-            newPipe.EndTransform.localPosition = new Vector3(newPipe.EndTransform.localPosition.x, newPipe.EndTransform.localPosition.y, newPipe.EndTransform.localPosition.z / m_gameManager.GetCurrentGamma());
+			if(m_gameManager != null)
+			{
+				Vector3 scaleVect = new Vector3(newPipe.transform.localScale.x, newPipe.transform.localScale.y, newPipe.transform.localScale.z / m_gameManager.GetCurrentGamma());
+				newPipe.transform.localScale = scaleVect;
+				//Also have to modify the start and end transform positions so that they line up with the ends of the pipe
+				newPipe.StartTransform.localPosition = new Vector3(newPipe.StartTransform.localPosition.x, newPipe.StartTransform.localPosition.y, newPipe.StartTransform.localPosition.z / m_gameManager.GetCurrentGamma());
+				newPipe.EndTransform.localPosition = new Vector3(newPipe.EndTransform.localPosition.x, newPipe.EndTransform.localPosition.y, newPipe.EndTransform.localPosition.z / m_gameManager.GetCurrentGamma());
+			}
 
 			// Move new pipe so it's lined up with last pipe
 			newPipe.transform.position = 
 				lastPipe.transform.position + (lastPipe.EndTransform.localPosition - newPipe.StartTransform.localPosition);
-
-          
-
-
 		}
 	}
 }

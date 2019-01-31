@@ -89,17 +89,24 @@ public abstract class Switcher<Type> : MonoBehaviour {
 	public List<GameObject> m_switchObjectList;
 	public List<string> m_names;
 	public SwitcherUtil.SwitcherType m_switcherDebugInputType;
+	public int m_startIndex = 0;
 
 	protected int m_currentIndex;
 
 	private static string m_debugName;
+
+	void Start()
+	{
+		SwitchAllObjects(
+			m_switchObjectList[Mathf.Min(m_currentIndex, m_switchObjectList.Count-1)]
+		);
+	}
 
 	void OnGUI()
 	{
 		GUILayout.BeginArea(new Rect(10 + 100 * (int) m_switcherDebugInputType, 10, 110, 500));
 		GUILayout.BeginVertical();
 
-		GUILayout.Label(string.Format("Select {0}", m_debugName));
 		for(int i = 0; i < m_switchObjectList.Count; i++)
 		{
 			bool current = m_currentIndex == i;
@@ -107,7 +114,7 @@ public abstract class Switcher<Type> : MonoBehaviour {
 			GUILayout.Label(string.Format(
 				"{0}{1} - {2}{3}",
 				current ? "[" : "",
-				i+1,
+				SwitcherUtil.GetKeyStr(m_switcherDebugInputType, i),
 				entryName,
 				current ? "]" : ""
 			));
