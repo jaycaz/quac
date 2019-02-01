@@ -74,7 +74,7 @@ public class SwitcherUtil
 				return -1;
 		}
 
-		for(int i = 0; i <= 9; i++)
+		for(int i = 0; i < keys.Length; i++)
 		{
 			if(Input.GetKeyDown(keys[i]))
 				return i;
@@ -140,7 +140,7 @@ public abstract class Switcher<Type> : MonoBehaviour {
 		if(index < m_switchObjectList.Count)
 		{
 			m_currentIndex = index;
-			SwitchAllObjects(m_switchObjectList[index - 1]);
+			SwitchAllObjects(m_switchObjectList[index]);
 		}
 	}
 

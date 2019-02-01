@@ -261,9 +261,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4eb227c1e0f194a8aeae8ad0dae862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_switchObjectList: []
+  m_switchObjectList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_names: []
   m_switcherDebugInputType: 0
+  m_startIndex: 0
   m_pipeSpawner: {fileID: 114022404925908724}
 --- !u!1 &1086458353761116
 GameObject:
@@ -1054,6 +1062,7 @@ MonoBehaviour:
   m_switchObjectList: []
   m_names: []
   m_switcherDebugInputType: 0
+  m_startIndex: 0
   m_particleRoot: {fileID: 1623638418098958}
 --- !u!1 &1623638418098958
 GameObject:

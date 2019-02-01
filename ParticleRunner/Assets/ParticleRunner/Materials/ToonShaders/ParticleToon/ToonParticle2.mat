@@ -5,7 +5,8 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: ToonParticle2
   m_Shader: {fileID: 4800000, guid: d12428961551799408aa97256fd770c3, type: 3}
   m_ShaderKeywords: N_F_O_ON N_F_SL_ON N_F_SON_ON _ALPHABASECUTOUT_ON _LIGHTAFFECTOUTLINECOLOR_ON
@@ -178,7 +179,7 @@ Material:
     - _RimLightUnfill: 1.5
     - _Saturation: 1
     - _SelfLitHighContrast: 1
-    - _SelfLitIntensity: 0.265
+    - _SelfLitIntensity: 0.389
     - _SelfLitPower: 1
     - _SelfShadowAffectedByLightShadowStrength: 0
     - _SelfShadowHardness: 1
@@ -214,8 +215,8 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GlossColor: {r: 1, g: 1, b: 1, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MainColor: {r: 0.990566, g: 0.9025772, b: 0.864409, a: 1}
-    - _OutlineColor: {r: 1, g: 0.79629624, b: 0, a: 1}
+    - _MainColor: {r: 1, g: 0.9669811, b: 0.9669811, a: 1}
+    - _OutlineColor: {r: 0.9716981, g: 0.65446955, b: 0.55460125, a: 1}
     - _OutlineOffset: {r: 0, g: 0, b: 0, a: 1}
     - _OverallShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimLightColor: {r: 1, g: 1, b: 1, a: 1}

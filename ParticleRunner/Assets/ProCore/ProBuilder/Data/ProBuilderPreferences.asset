@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -15,6 +16,7 @@ MonoBehaviour:
   - pbShowCollider
   m_Int_keys:
   - pbHandleAlignment
+  - pbDefaultExportFormat
   m_Float_keys:
   - pbEditorScroll.x
   - pbEditorScroll.y
@@ -23,7 +25,7 @@ MonoBehaviour:
   m_Color_keys: []
   m_Material_keys: []
   m_Bool_values: 01
-  m_Int_values: 00000000
+  m_Int_values: 0000000003000000
   m_Float_values:
   - 0
   - 0

@@ -6,19 +6,31 @@ ModelImporter:
     100000: //RootNode
     100002: PipeStripe2_0
     100004: PipeStripe2_1
+    100006: pb_PipeStripe_0
+    100008: pb_PipeStripe_1
     400000: //RootNode
     400002: PipeStripe2_0
     400004: PipeStripe2_1
+    400006: pb_PipeStripe_0
+    400008: pb_PipeStripe_1
     2100000: PipeDark
     2100002: PipeDefault
     2300000: PipeStripe2_0
     2300002: PipeStripe2_1
+    2300004: pb_PipeStripe_0
+    2300006: pb_PipeStripe_1
     3300000: PipeStripe2_0
     3300002: PipeStripe2_1
+    3300004: pb_PipeStripe_0
+    3300006: pb_PipeStripe_1
     4300000: PipeStripe2_0
     4300002: PipeStripe2_1
+    4300004: pb_PipeStripe_0
+    4300006: pb_PipeStripe_1
     6400000: PipeStripe2_0
     6400002: PipeStripe2_1
+    6400004: pb_PipeStripe_0
+    6400006: pb_PipeStripe_1
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -53,6 +65,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 1
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -77,6 +90,9 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
@@ -91,7 +107,6 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
