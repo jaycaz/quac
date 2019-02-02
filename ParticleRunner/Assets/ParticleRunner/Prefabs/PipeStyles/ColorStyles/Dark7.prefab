@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114719121133230338}
   - component: {fileID: 54463467912716112}
   m_Layer: 0
-  m_Name: Light1
+  m_Name: Dark7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,6 +78,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_startTransform: {fileID: 4733680263578558676}
   m_endTransform: {fileID: 3145749321037251063}
+  m_darkMaterial: {fileID: 2100000, guid: 3c4c4799fbce3064680e235b9824eace, type: 2}
+  m_lightMaterial: {fileID: 2100000, guid: 44516de648b993d4bad87c188340fb7f, type: 2}
 --- !u!54 &54463467912716112
 Rigidbody:
   m_ObjectHideFlags: 0

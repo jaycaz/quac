@@ -78,6 +78,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_startTransform: {fileID: 3410050621774350196}
   m_endTransform: {fileID: 3506036698623463114}
+  m_darkMaterial: {fileID: 2100000, guid: 1c46f7d53eb138e478e8b5970299e435, type: 2}
+  m_lightMaterial: {fileID: 2100000, guid: 5a608cab75197534cb067ec0fee73913, type: 2}
 --- !u!54 &54706067743029350
 Rigidbody:
   m_ObjectHideFlags: 0

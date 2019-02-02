@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SwitcherUtil
 {
-	public enum SwitcherType
+	public enum SwitcherInputType
 	{
 		Numbers,
 		QWERTY,
@@ -34,40 +34,40 @@ public class SwitcherUtil
 		KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V, KeyCode.B, KeyCode.N, KeyCode.M, KeyCode.Comma, KeyCode.Period, KeyCode.Slash
 	};
 
-	public static char GetKeyStr(SwitcherType switcherType, int index)
+	public static char GetKeyStr(SwitcherInputType switcherType, int index)
 	{
 		if(index < 0 || index > 9) return '\0';
 
 		switch(switcherType)
 		{
-			case SwitcherType.Numbers:
+			case SwitcherInputType.Numbers:
 				return NUMBER_STR[index];
-			case SwitcherType.QWERTY:
+			case SwitcherInputType.QWERTY:
 				return QWERTY_STR[index];
-			case SwitcherType.ASDFGH:
+			case SwitcherInputType.ASDFGH:
 				return ASDFGH_STR[index];
-			case SwitcherType.ZXCVBN:
+			case SwitcherInputType.ZXCVBN:
 				return ZXCVBN_STR[index];
 			default:
 				return '\0';
 		}
 	}
 
-	public static int GetInput(SwitcherType switcherType)
+	public static int GetInputIndex(SwitcherInputType switcherType)
 	{
 		KeyCode[] keys;
 		switch(switcherType)
 		{
-			case SwitcherType.Numbers:
+			case SwitcherInputType.Numbers:
 				keys = NUMBER_KEYS;
 				break;
-			case SwitcherType.QWERTY:
+			case SwitcherInputType.QWERTY:
 				keys = QWERTY_KEYS;
 				break;
-			case SwitcherType.ASDFGH:
+			case SwitcherInputType.ASDFGH:
 				keys = ASDFGH_KEYS;
 				break;
-			case SwitcherType.ZXCVBN:
+			case SwitcherInputType.ZXCVBN:
 				keys = ZXCVBN_KEYS;
 				break;
 			default:
@@ -84,12 +84,13 @@ public class SwitcherUtil
 	}
 }
 
-public abstract class Switcher<Type> : MonoBehaviour {
+public abstract class Switcher<SwitchType> : MonoBehaviour {
 
-	public List<GameObject> m_switchObjectList;
+	public List<SwitchType> m_switchObjectList;
 	public List<string> m_names;
-	public SwitcherUtil.SwitcherType m_switcherDebugInputType;
+	public SwitcherUtil.SwitcherInputType m_switcherDebugInputType;
 	public int m_startIndex = 0;
+	public bool m_autoSwitchOnStart = false;
 
 	protected int m_currentIndex;
 
@@ -97,9 +98,12 @@ public abstract class Switcher<Type> : MonoBehaviour {
 
 	void Start()
 	{
-		SwitchAllObjects(
-			m_switchObjectList[Mathf.Min(m_currentIndex, m_switchObjectList.Count-1)]
-		);
+		if(m_autoSwitchOnStart)
+		{
+			SwitchAllObjects(
+				m_switchObjectList[Mathf.Min(m_startIndex, m_switchObjectList.Count-1)]
+			);
+		}
 	}
 
 	void OnGUI()
@@ -110,7 +114,20 @@ public abstract class Switcher<Type> : MonoBehaviour {
 		for(int i = 0; i < m_switchObjectList.Count; i++)
 		{
 			bool current = m_currentIndex == i;
-			string entryName = (i < m_names.Count) ? m_names[i] : m_switchObjectList[i].name;
+			string entryName;
+				if(i < m_names.Count)
+				{
+					entryName = m_names[i];
+				}
+				else if(m_switchObjectList[i] != null)
+				{
+					entryName = m_switchObjectList[i].ToString();
+				}
+				else
+				{
+					entryName = "???";
+				}
+
 			GUILayout.Label(string.Format(
 				"{0}{1} - {2}{3}",
 				current ? "[" : "",
@@ -127,7 +144,7 @@ public abstract class Switcher<Type> : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		int input = SwitcherUtil.GetInput(m_switcherDebugInputType);
+		int input = SwitcherUtil.GetInputIndex(m_switcherDebugInputType);
 
 		if(input >= 0)
 		{
@@ -144,57 +161,15 @@ public abstract class Switcher<Type> : MonoBehaviour {
 		}
 	}
 
-	protected abstract void SwitchAllObjects(GameObject newObjPrefab);
+	protected abstract void SwitchAllObjects(SwitchType newObjPrefab);
 }
 
 public class PipeSwitcher : Switcher<Pipe> {
 
 	public PipeSpawner m_pipeSpawner;
 
-	protected override void SwitchAllObjects(GameObject newPipePrefab)
+	protected override void SwitchAllObjects(Pipe newPipePrefab)
 	{
-		// Find all Pipe objects and replace them
-		Transform pipeRoot = m_pipeSpawner.m_pipesRoot.transform;
-		int numPipes = pipeRoot.childCount;
-		Pipe[] originalPipes = pipeRoot.GetComponentsInChildren<Pipe>();
-
-		if(numPipes > 0)
-		{
-			// Instantiate first new pipe
-			Transform firstPipeTransform = pipeRoot.GetChild(0);
-			GameObject firstNewPipe = GameObject.Instantiate(newPipePrefab);
-			firstNewPipe.transform.position = firstPipeTransform.position;
-			firstNewPipe.transform.rotation = firstPipeTransform.rotation;
-			firstNewPipe.transform.localScale = firstPipeTransform.localScale;
-
-			// Destroy original pipes
-			for(int i = originalPipes.Length - 1; i >= 0; i--)
-			{
-				GameObject.Destroy(originalPipes[i].gameObject);
-			}
-
-			// Add first pipe
-			firstNewPipe.transform.SetParent(pipeRoot);
-
-			// Instantiate the rest of the f***ing owl
-			Pipe prevPipe = firstNewPipe.GetComponent<Pipe>();
-			Debug.Assert(prevPipe != null, "PipeSwitcher: cannot switch to object without Pipe component");
-			for(int i = 1; i < numPipes; i++)
-			{
-				// Place each new pipe at the end of the previous pipe
-				GameObject newPipe = GameObject.Instantiate(newPipePrefab);
-				newPipe.transform.position = prevPipe.transform.position + 
-					(prevPipe.EndTransform.localPosition - prevPipe.StartTransform.localPosition);
-				newPipe.transform.rotation = prevPipe.transform.rotation;
-				newPipe.transform.localScale = prevPipe.transform.localScale;
-				newPipe.transform.SetParent(pipeRoot);
-				prevPipe = newPipe.GetComponent<Pipe>();
-			}
-		}
-
-		if(m_pipeSpawner != null)
-		{
-			m_pipeSpawner.m_pipePrefab = newPipePrefab;
-		}
+		m_pipeSpawner.SwitchAllPipes(newPipePrefab);
 	}
 }

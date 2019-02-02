@@ -7,7 +7,7 @@ public class ParticleSwitcher : Switcher<Electron> {
 
 	public GameObject m_particleRoot;
 
-	protected override void SwitchAllObjects(GameObject newParticlePrefab)
+	protected override void SwitchAllObjects(Electron newParticlePrefab)
 	{
 		// Find all particle objects and replace them
 		int numParticles = m_particleRoot.transform.childCount;
@@ -16,7 +16,7 @@ public class ParticleSwitcher : Switcher<Electron> {
 		for(int i = originalParticles.Length - 1; i >= 0; i--)
 		{
 			Electron p = originalParticles[i];
-			GameObject newParticle = GameObject.Instantiate(newParticlePrefab, p.transform.position, p.transform.rotation);
+			GameObject newParticle = GameObject.Instantiate(newParticlePrefab.gameObject, p.transform.position, p.transform.rotation);
 			newParticle.transform.parent = m_particleRoot.transform;
 			GameObject.Destroy(originalParticles[i].gameObject);
 		}
