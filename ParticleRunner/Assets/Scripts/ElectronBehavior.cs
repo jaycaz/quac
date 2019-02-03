@@ -6,10 +6,19 @@ using UnityEngine.Events; // Just in case
 public class ElectronBehavior : MonoBehaviour {
 
     //Parameters for tuning beam
-    public float quadForceTuningParam = 1;
-    public float coulombForceTuningParam = 1;
+    private float quadForceTuningParam = 10f;
+    private float coulombForceTuningParam = 0.0003f;
 
-    private float electronWiggleParameter = 0;
+    private float coulombChange=0.00005f;
+    private float quadChange=0.5f;
+
+    private float maxCoulomb=0.01f;
+    private float minCoulomb=0f;
+
+    private float maxQuad=30f;
+    private float minQuad=0f;
+
+    private float electronWiggleParameter = 0f;
     private float electronWiggleFrequency; //The frequency of sinusoidal oscillation is defined here.
     private float initialElectronPositionZ;
 
@@ -18,12 +27,22 @@ public class ElectronBehavior : MonoBehaviour {
     void OnEnable () {
         EventManager.StartListening("Xfocus",DoQuadrupoleFocusingX);
         EventManager.StartListening("Yfocus",DoQuadrupoleFocusingY);
-        
+
+        EventManager.StartListening("addCoul",addCoul);
+        EventManager.StartListening("subCoul",subCoul);
+        EventManager.StartListening("addQuad",addQuad);
+        EventManager.StartListening("subQuad",subQuad);
+
     }
 
     void OnDisable () {
         EventManager.StopListening("Xfocus",DoQuadrupoleFocusingX);
         EventManager.StopListening("Yfocus",DoQuadrupoleFocusingY);
+
+        EventManager.StopListening("addCoul",addCoul);
+        EventManager.StopListening("subCoul",subCoul);
+        EventManager.StopListening("addQuad",addQuad);
+        EventManager.StopListening("subQuad",subQuad);
     }
     
 	// Use this for initialization
@@ -155,5 +174,28 @@ public class ElectronBehavior : MonoBehaviour {
             Destroy(gameObject); 
         }
 	}
-
+    // Auxiliary Functions
+    // Tune the electric force constant
+    public void changeElectricForce(float delta){
+        coulombForceTuningParam=Mathf.Clamp(coulombForceTuningParam+delta, minCoulomb, maxCoulomb);
+    }
+    // Tune the magnetic force constant
+    public void changeMagneticForce(float delta){
+        quadForceTuningParam=Mathf.Clamp(quadForceTuningParam+delta, minQuad, maxQuad);
+        Debug.Log(quadForceTuningParam);
+    }
+    // Tune forces up
+    public void addCoul(){
+        changeElectricForce(coulombChange);
+    }
+    public void addQuad(){
+        changeMagneticForce(quadChange);
+    }
+    // Tune forces down
+     public void subCoul(){
+         changeElectricForce(-coulombChange);
+    }
+    public void subQuad(){
+        changeMagneticForce(-quadChange);
+    }
 }
