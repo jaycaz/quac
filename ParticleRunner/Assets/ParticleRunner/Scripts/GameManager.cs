@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour {
     public float electronZPosition = -7f;
     public float startingBunchSpanTuningParam = 0.1f;
 
+    //These deal with the end-conditions of the game
+    public float gameTime = 30f; //seconds
+
 
 
 
