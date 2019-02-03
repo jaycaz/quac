@@ -5,14 +5,22 @@ using UnityEngine;
 public class PipeSpawner : MonoBehaviour {
 
 	public GameObject m_pipePrefab;
-	public Pipe m_pipeMaterialPrefab;
+    public GameObject m_irisPrefab;
+    public Pipe m_pipeMaterialPrefab;
 	public GameObject m_pipesRoot;
     private GameManager m_gameManager;
 
-	// Use this for initialization
-	void Start () {
+    public bool spawnIris;
+    public int spawnIrisSpacing;
+
+    private int spawnPipeIndex;
+
+    // Use this for initialization
+    void Start () {
 		Debug.Assert(m_pipePrefab != null, 
 			"PipeSpawner: Missing a pipe prefab to spawn");
+        Debug.Assert(m_irisPrefab != null,
+            "PipeSpawner: Missing a iris prefab to spawn");
         m_gameManager = FindObjectOfType<GameManager>();
 	}
 	
@@ -77,7 +85,16 @@ public class PipeSpawner : MonoBehaviour {
 		return newPipeObj;
 	}
 
-	public void OnTriggerExit(Collider other)
+    private GameObject NewIrisInstance(GameObject irisPrefab)
+    {
+        GameObject newIrisObj = GameObject.Instantiate(irisPrefab.gameObject);
+        // Pipe newPipe = newIrisObj.GetComponent<Pipe>();
+        // newPipe.SetIrisMaterialsFromPipe(m_pipeMaterialPrefab);
+
+        return newIrisObj;
+    }
+
+    public void OnTriggerExit(Collider other)
 	{
 		// Pipe has exited the trigger, spawn a new pipe on the end
 		if(other.GetComponent<Pipe>() != null)
@@ -88,9 +105,21 @@ public class PipeSpawner : MonoBehaviour {
 			Transform t = m_pipesRoot.transform.GetChild(m_pipesRoot.transform.childCount - 1);
 			Pipe lastPipe = t.GetComponent<Pipe>();
 
-			// Instantiate new pipe
-			GameObject newPipeObj = NewPipeInstance(m_pipePrefab);
-			Pipe newPipe = newPipeObj.GetComponent<Pipe>();
+            // Instantiate new pipe or iris
+            GameObject newPipeObj;
+            if (spawnIris == true && spawnPipeIndex == spawnIrisSpacing)
+            {
+                // Debug.Log("Instantiating iris");
+                newPipeObj = NewIrisInstance(m_irisPrefab);
+                spawnPipeIndex = 0;
+            }
+            else
+            {
+                newPipeObj = NewPipeInstance(m_pipePrefab);
+                spawnPipeIndex++;
+            }
+
+            Pipe newPipe = newPipeObj.GetComponent<Pipe>();
 
 			newPipeObj.transform.SetParent(m_pipesRoot.transform);
 
