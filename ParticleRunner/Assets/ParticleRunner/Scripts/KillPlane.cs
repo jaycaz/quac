@@ -9,6 +9,7 @@ public class KillPlane : MonoBehaviour {
 		if(other.GetComponent<Pipe>() != null)
 		{
 			GameObject.Destroy(other.gameObject);
+            Debug.Log("Kill pipe");
 		}
 	}
 }

@@ -117,7 +117,12 @@ public class Pipe : MonoBehaviour {
 		SetMaterials(pipe.m_darkMaterial, pipe.m_lightMaterial);
 	}
 
-	public void SetMaterials(Material darkMat, Material lightMat)
+    public void SetIrisMaterialsFromPipe(Pipe pipe)
+    {
+        SetMaterials(pipe.m_lightMaterial, pipe.m_lightMaterial);
+    }
+
+    public void SetMaterials(Material darkMat, Material lightMat)
 	{
 		FindAllMaterialRefs();
 		SetDarkMaterial(darkMat);
