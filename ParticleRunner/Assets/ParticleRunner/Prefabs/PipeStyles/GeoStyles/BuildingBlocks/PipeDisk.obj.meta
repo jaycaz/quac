@@ -8,6 +8,7 @@ ModelImporter:
     400000: pb_PipeDisk
     400002: //RootNode
     2100000: PipeDefault
+    2100002: pb_PipeDiskMat
     2300000: pb_PipeDisk
     3300000: pb_PipeDisk
     4300000: pb_PipeDisk

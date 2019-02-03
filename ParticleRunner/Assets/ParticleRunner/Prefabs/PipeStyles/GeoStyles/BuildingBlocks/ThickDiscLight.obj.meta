@@ -10,6 +10,7 @@ ModelImporter:
     400002: ThickDiscLight_(1)
     400004: ThickDiscLight
     2100000: PipeDefault
+    2100002: ThickDiscLightMat
     2300000: ThickDiscLight_(1)
     2300002: ThickDiscLight
     3300000: ThickDiscLight_(1)
